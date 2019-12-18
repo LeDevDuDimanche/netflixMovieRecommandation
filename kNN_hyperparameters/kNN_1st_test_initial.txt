@@ -1,0 +1,22 @@
+{'split0_test_rmse': array([1.02711673, 1.01785934]),
+ 'split1_test_rmse': array([1.02881252, 1.01906062]),
+ 'split2_test_rmse': array([1.02905758, 1.01986377]),
+ 'mean_test_rmse': array([1.02832895, 1.01892791]),
+ 'std_test_rmse': array([0.00086298, 0.00082367]),
+ 'rank_test_rmse': array([2, 1], dtype=int64),
+ 'split0_test_mae': array([0.83961779, 0.8287241 ]),
+ 'split1_test_mae': array([0.84108488, 0.82986846]),
+ 'split2_test_mae': array([0.8409514 , 0.83022969]),
+ 'mean_test_mae': array([0.84055136, 0.82960742]),
+ 'std_test_mae': array([0.00066238, 0.00064177]),
+ 'rank_test_mae': array([2, 1], dtype=int64),
+ 'mean_fit_time': array([48.25161791, 54.3933514 ]),
+ 'std_fit_time': array([3.01440897, 1.50119584]),
+ 'mean_test_time': array([372.67801499, 586.3757875 ]),
+ 'std_test_time': array([3.50377827, 3.37533003]),
+ 'params': array([{'k': 50, 'k_min': 2}, {'k': 300, 'k_min': 5}], dtype=object),
+ 'param_k': [50, 300], 'param_k_min': [2, 5]}
+
+Best:
+	1.0189279093032042
+	{'k': 300, 'k_min': 5}

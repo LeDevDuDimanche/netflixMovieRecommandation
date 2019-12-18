@@ -1,0 +1,8 @@
+1st test: {k=50, kmin=2} {k=300, kmin=5} higher k and kmin seem to work better
+
+2nd test: k=300 seems the best
+
+3rd test: same results for all kmin between 1 and 10 but considerably lower calculation time for higher kmin.
+
+4th test: kmin = 50 => ?
+
