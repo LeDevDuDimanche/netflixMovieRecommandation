@@ -38,10 +38,10 @@ def init_MF(trainset, num_features, min_num_ratings, debug=False):
 
 
 class ALS(AlgoBase):
-    def __init__(self, n_epochs=20, num_features=20, lambda_user=0.1, lambda_item=0.7, min_num_ratings=1, verbose=False, debug=False):
+    def __init__(self, n_epochs=20, num_features=20, lambda_user=0.1, lambda_item=0.7, lambda_all=None, min_num_ratings=1, verbose=False, debug=False):
         self.num_features = num_features
-        self.lambda_user = lambda_user
-        self.lambda_item = lambda_item
+        self.lambda_user = lambda_user if lambda_all == None else lambda_all
+        self.lambda_item = lambda_item if lambda_all == None else lambda_all
         self.min_num_ratings = min_num_ratings
         self.n_epochs = n_epochs 
         self.debug = debug
