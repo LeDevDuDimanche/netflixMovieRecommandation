@@ -12,3 +12,12 @@ def gen_submission(f_name, algo):
   submission = pd.read_csv("data/sample_submission.csv")
   submission['Prediction'] = [int(round(algo.predict(user, movie).est)) for [user, movie] in submission['Id'].str.split('_')]
   submission.to_csv(f_name, index=False)
+
+# algos = [(algo, weight), i.e. (algo1, 0.5)]
+def gen_submission_multi(f_name, algos):
+  def process(user, movie):
+    return sum([algo.predict(user, movie).est * weight for (algo, weight) in algos])
+
+  submission = pd.read_csv("data/sample_submission.csv")
+  submission['Prediction'] = [int(round(process(user, movie))) for [user, movie] in submission['Id'].str.split('_')]
+  submission.to_csv(f_name, index=False)
