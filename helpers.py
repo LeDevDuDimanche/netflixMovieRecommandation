@@ -3,6 +3,7 @@ from sklearn.preprocessing import PolynomialFeatures
 import pandas as pd
 import os
 import re
+from sklearn.cluster import KMeans
 
 def load_data(f):
   raw = pd.read_csv(f, converters = {'Id' : lambda x: x.split('_')} )
@@ -78,3 +79,24 @@ def truncate(submission_file_name, out_file_name):
                 elif rating > 5:
                     rating = 5
                 f_out.write(m.group(1) + str(rating)+"\n")
+
+def clusterize(data, n_clusters):
+  def fill_movies(users):
+    return users.fillna(users.mean())
+  mega_matrix = data.pivot(index = 'movie', columns = 'user', values = 'rating').apply(fill_movies, axis=1)
+  kmeans = KMeans(n_clusters=n_clusters, random_state=999).fit_predict(mega_matrix.values)
+  clusters = pd.DataFrame(data={ 'cluster': kmeans, 'movie': mega_matrix.index })
+  cluster_dict = clusters.set_index('movie').to_dict()
+  cluster_dict = cluster_dict['cluster']
+  clustered = clusters.set_index('movie').join(data.set_index('movie'), how='outer', on='movie')
+  clustered_dict = {}
+  for i in range(len(clustered['cluster'].unique())):
+      clustered_dict[i] = clustered[clustered['cluster'] == i].reset_index().drop(columns=['cluster'])
+  return clustered_dict
+
+def reject_cluster(data, n):
+  d = pd.DataFrame()
+  for k in data:
+    if k != n:
+      d = d.append(data[k])
+  return d

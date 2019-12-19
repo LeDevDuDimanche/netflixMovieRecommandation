@@ -1,14 +1,10 @@
 # Project Recommender System
 
-For this choice of project task, you are supposed to predict good recommendations, e.g. of movies to users. We have acquired ratings of 10000 users for 1000 different items (think of movies). All ratings are integer values between 1 and 5 stars. No additional information is available on the movies or users.
+This repository implements recommender system for aicrowd EPFL challenge
 
-### Evaluation Metric
-Your collaborative filtering algorithm is evaluated according to the prediction error, measured by root-mean-squared error (RMSE).
-
-### Submission system environment setup:
-
-1. The dataset is available from the Kaggle page, as linked in the PDF project description
-
-2. All information of the task and some baselines are provided in Exercise 10:
-
- [https://github.com/epfml/ML_course/tree/master/labs/ex10]
+### Important files
+`run.py` - implements complete pipeline using SVD 5-fold crossvalidation. Folder `data` has to be present and contain train data and submission template.
+`ALS` - implementation of ALS matrix factorization
+`Cocktail.ipynb` - exploration of various algorithms and blending
+`Clustering.ipynb` - attempt to implement clustering
+`helpers.py` - some useful (and not really) helpers
