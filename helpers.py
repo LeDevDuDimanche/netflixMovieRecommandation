@@ -1,3 +1,5 @@
+import numpy as np
+from sklearn.preprocessing import PolynomialFeatures
 import pandas as pd
 import os
 import re
@@ -26,6 +28,25 @@ def gen_submission_multi(f_name, algos):
   submission.to_csv(to_clean_f_name, index=False)
   truncate(to_clean_f_name, f_name)
   os.remove(to_clean_f_name)
+
+def gen_submission_multi_poly_features(f_name, predictors, weights, degree = None):
+  def process(user, movie):
+    predictions = [predictor.predict(user, movie).est for predictor in predictors]
+    if degree == None:
+        expanded_predictions = predictions
+    else:
+        poly_features = PolynomialFeatures(degree=degree) 
+        expanded_predictions = poly_features.fit_transform(predictions)
+    return np.sum(np.multiply(predictions, weights))
+
+  submission = pd.read_csv("data/sample_submission.csv")
+  submission['Prediction'] = [int(round(process(user, movie))) for [user, movie] in submission['Id'].str.split('_')]
+  to_clean_f_name = "to_clean_"+f_name
+  submission.to_csv(to_clean_f_name, index=False)
+  truncate(to_clean_f_name, f_name)
+  os.remove(to_clean_f_name)
+
+
 
 
 def gen_submission_multi_with_train(f_name, algos):
