@@ -24,7 +24,7 @@ def gen_submission_multi(f_name, algos):
 
   submission = pd.read_csv("data/sample_submission.csv")
   submission['Prediction'] = [int(round(process(user, movie))) for [user, movie] in submission['Id'].str.split('_')]
-  to_clean_f_name = "to_clean_"+f_name
+  to_clean_f_name = f_name+".to_clean"
   submission.to_csv(to_clean_f_name, index=False)
   truncate(to_clean_f_name, f_name)
   os.remove(to_clean_f_name)
@@ -36,15 +36,20 @@ def gen_submission_multi_poly_features(f_name, predictors, weights, degree = Non
         expanded_predictions = predictions
     else:
         poly_features = PolynomialFeatures(degree=degree) 
-        expanded_predictions = poly_features.fit_transform(predictions)
-    return np.sum(np.multiply(predictions, weights))
+        reshaped = np.array(predictions).reshape(1,-1) 
+        expanded_predictions = poly_features.fit_transform(reshaped) 
+        point_wise_mult = np.multiply(expanded_predictions, weights)
+        print("predictions ", predictions)
+        print("expanded and weights ", expanded_predictions, weights)
+        print("point wise mult", point_wise_mult)
+    return np.sum(point_wise_mult)
 
   submission = pd.read_csv("data/sample_submission.csv")
   submission['Prediction'] = [int(round(process(user, movie))) for [user, movie] in submission['Id'].str.split('_')]
-  to_clean_f_name = "to_clean_"+f_name
+  to_clean_f_name = f_name+".to_clean"
   submission.to_csv(to_clean_f_name, index=False)
   truncate(to_clean_f_name, f_name)
-  os.remove(to_clean_f_name)
+ # os.remove(to_clean_f_name)
 
 
 
