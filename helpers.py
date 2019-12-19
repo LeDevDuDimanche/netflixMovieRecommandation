@@ -1,4 +1,6 @@
 import pandas as pd
+import os
+import re
 
 def load_data(f):
   raw = pd.read_csv(f, converters = {'Id' : lambda x: x.split('_')} )
@@ -20,7 +22,11 @@ def gen_submission_multi(f_name, algos):
 
   submission = pd.read_csv("data/sample_submission.csv")
   submission['Prediction'] = [int(round(process(user, movie))) for [user, movie] in submission['Id'].str.split('_')]
-  submission.to_csv(f_name, index=False)
+  to_clean_f_name = "to_clean_"+f_name
+  submission.to_csv(to_clean_f_name, index=False)
+  truncate(to_clean_f_name, f_name)
+  os.remove(to_clean_f_name)
+
 
 def gen_submission_multi_with_train(f_name, algos):
   def process(user, movie):
@@ -29,3 +35,20 @@ def gen_submission_multi_with_train(f_name, algos):
   submission = pd.read_csv("data/data_train.csv")
   submission['Prediction2'] = [int(round(process(user, movie))) for [user, movie] in submission['Id'].str.split('_')]
   submission.to_csv(f_name, index=False)  
+
+def truncate(submission_file_name, out_file_name):
+    """changes values that are strictly inferior to 1 to 1 and values strictly superior to 5 to 5"""
+    with open(submission_file_name, "r") as f:
+        with open(out_file_name, "w") as f_out:
+            f_out.write("Id,Prediction\n")
+            for line in f:
+                m = re.match("(.*,)(-?\d+)", line)
+                if m == None:
+                    print("No match found for "+ line)
+                    continue
+                rating = int(m.group(2))
+                if rating < 1:
+                    rating = 1
+                elif rating > 5:
+                    rating = 5
+                f_out.write(m.group(1) + str(rating)+"\n")
