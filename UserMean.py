@@ -7,19 +7,16 @@ from surprise import AlgoBase
 class UserMean(AlgoBase): 
 
     def __init__(self, bsl_options={}, verbose=True):
-
         AlgoBase.__init__(self, bsl_options=bsl_options)
         self.verbose = verbose
 
     def fit(self, trainset):
-
         AlgoBase.fit(self, trainset)
         self.bu, self.bi = self.compute_baselines()
-
         return self
 
     def estimate(self, u, i):
         if not self.trainset.knows_user(u):
-            raise PredictionImpossible("User and item are unknown") 
+            return self.default_prediction() 
 
-        return self.bu[u]  
+        return self.default_prediction() + self.bu[u]  
